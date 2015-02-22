@@ -52,7 +52,7 @@ public class TimelineActivity extends ActionBarActivity implements ComposeTweetD
                 // once the network request has completed successfully.
                 aTweets.clear();
                 MAX_ID = Long.MAX_VALUE;
-                populateTimeline();
+                populateTimeline(null);
                 swipeContainer.setRefreshing(false);
             }
         });
@@ -84,7 +84,7 @@ public class TimelineActivity extends ActionBarActivity implements ComposeTweetD
         aTweets = new TweetsArrayAdapter(this, tweets);
         lvTweets.setAdapter(aTweets);
         client = TwitterApplication.getRestClient();
-        populateTimeline();
+        populateTimeline(null);
         getLoggedInUser();
 
     }
@@ -109,33 +109,39 @@ public class TimelineActivity extends ActionBarActivity implements ComposeTweetD
         // This method probably sends out a network request and appends new data items to your adapter.
         // Use the offset value and add it as a parameter to your API request to retrieve paginated data.
         // Deserialize API response and then construct new objects to append to the adapter
-        populateTimeline();
+        populateTimeline(null);
     }
 
 
     //Send an API request to get the timeline json
     // Fill the listview by creating the tweet objects from json
-    private void populateTimeline() {
-        client.getHomeTimeline(new JsonHttpResponseHandler(){
-            //Success
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                Log.d("DEBUG", json.toString());
-                //JSON HERE
-                //DESERIALIZE JSON
-                //CREATE MODEL AND ADD THEM TO ADAPTER
-                //LOAD THE MODEL DATA INTO LISTVIEW
-                aTweets.addAll(Tweet.fromJSONArray(json));
-                Log.d("DEBUG", aTweets.toString());
+    private void populateTimeline(Tweet t) {
+        if(t == null){
+            client.getHomeTimeline(new JsonHttpResponseHandler(){
+                //Success
+                @Override
+                public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
+                    Log.d("DEBUG", json.toString());
+                    //JSON HERE
+                    //DESERIALIZE JSON
+                    //CREATE MODEL AND ADD THEM TO ADAPTER
+                    //LOAD THE MODEL DATA INTO LISTVIEW
+                    aTweets.addAll(Tweet.fromJSONArray(json));
+                    Log.d("DEBUG", aTweets.toString());
 
-            }
+                }
 
-            //Failure
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
-            }
-        }, MAX_ID == Long.MAX_VALUE ? Long.MAX_VALUE : MAX_ID - 1);
+                //Failure
+                @Override
+                public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                    Log.d("DEBUG", errorResponse.toString());
+                }
+            }, MAX_ID == Long.MAX_VALUE ? Long.MAX_VALUE : MAX_ID - 1);
+        }
+        else{
+            aTweets.insert(t,0);
+        }
+
     }
 
 
@@ -178,17 +184,16 @@ public class TimelineActivity extends ActionBarActivity implements ComposeTweetD
 
                 Log.d("DEBUG", json.toString());
 
-//                Tweet t = Tweet.fromJSON(json);
+                Tweet t = Tweet.fromJSON(json);
 //                ArrayList<Tweet> updatedTweets = new ArrayList<>();
 //                updatedTweets.add(t);
 //                updatedTweets.addAll((ArrayList<Tweet>)tweets.clone());
 //                aTweets.clear();
 //                tweets = updatedTweets;
 //                aTweets.notifyDataSetChanged();
-                aTweets.clear();
-//                tweets.add(t);
-                MAX_ID = Long.MAX_VALUE;
-                populateTimeline();
+//                MAX_ID = Long.MAX_VALUE;
+                populateTimeline(t);
+                composeTweetDialog.dismiss();
             }
 
             @Override

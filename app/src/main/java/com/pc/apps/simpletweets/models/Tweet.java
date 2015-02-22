@@ -61,8 +61,9 @@ public class Tweet implements Parcelable {
                     replace("month ago", "mo").
                     replace("months ago", "mo").
                     replace("year ago", "y").
-                    replace("years ago", "y");
-
+                    replace("years ago", "y").
+                    replace(" moments from now", "0s")
+                ;
 
         } catch (ParseException e) {
             e.printStackTrace();

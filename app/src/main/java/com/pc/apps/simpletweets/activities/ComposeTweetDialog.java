@@ -113,8 +113,6 @@ public class ComposeTweetDialog extends DialogFragment {
                 if (text != null && !text.isEmpty() && text.length() <= 140) {
                     //Fire the event so that the activity can post the tweet and update view
                     listener.onTweetPostClicked(text);
-                    //dismiss the dialog
-                    getDialog().dismiss();
                 }
                 else {
                     Toast.makeText(getDialog().getContext(), "Tweet cannot be empty or more than 140 chars", Toast.LENGTH_SHORT).show();
