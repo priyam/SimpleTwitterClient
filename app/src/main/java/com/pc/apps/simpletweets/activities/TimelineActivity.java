@@ -1,5 +1,6 @@
 package com.pc.apps.simpletweets.activities;
 
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
@@ -64,6 +65,7 @@ public class TimelineActivity extends ActionBarActivity implements ComposeTweetD
 
     // Set a ToolBar to replace the ActionBar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
 
         lvTweets = (ListView) findViewById(R.id.lvTweets);

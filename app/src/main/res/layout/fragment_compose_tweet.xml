@@ -18,6 +18,7 @@
 
 
         <ImageView
+            android:layout_margin="5dp"
             android:layout_width="60dp"
             android:layout_height="match_parent"
             android:id="@+id/ivUserPic"
@@ -28,6 +29,7 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:padding="5dp"
             >
             <TextView
                 android:layout_width="wrap_content"
@@ -62,8 +64,10 @@
                 android:layout_width="60dp"
                 android:layout_height="?attr/actionBarSize"
                 android:id="@+id/iBtnPostTweet"
-                android:background="#4099FF"
-                android:text="TWEET"
+                android:background="#39A9F2"
+                android:text="Tweet"
+                android:typeface="sans"
+                android:textStyle="bold"
                 style="@style/ButtonText"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"

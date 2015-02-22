@@ -27,6 +27,7 @@ public class Tweet implements Parcelable {
     private User user;
     private String createdAt;
 
+
     public String getBody() {
         return body;
     }
@@ -42,9 +43,26 @@ public class Tweet implements Parcelable {
         SimpleDateFormat sf = new SimpleDateFormat(TwitterDateFormat, Locale.US);
         sf.setLenient(true);
         try {
+            Date now = new Date();
             Date date = sf.parse(createdAt);
             PrettyTime p = new PrettyTime();
-            return p.format(date);
+            String sDate = p.format(date);
+            long diffInSeconds = (now.getTime() - date.getTime())/1000;
+
+        return sDate.replace("moments ago", (diffInSeconds < 60? diffInSeconds + "s" : diffInSeconds/60 + "m")).
+                    replace(" minute ago", "m").
+                    replace(" minutes ago", "m").
+                    replace(" hour ago", "h").
+                    replace(" hours ago", "h").
+                    replace(" day ago", "d").
+                    replace(" days ago", "d").
+                    replace("week ago", "w").
+                    replace("weeks ago", "w").
+                    replace("month ago", "mo").
+                    replace("months ago", "mo").
+                    replace("year ago", "y").
+                    replace("years ago", "y");
+
 
         } catch (ParseException e) {
             e.printStackTrace();
