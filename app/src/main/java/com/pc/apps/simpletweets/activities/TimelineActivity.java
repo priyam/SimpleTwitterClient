@@ -1,6 +1,7 @@
 package com.pc.apps.simpletweets.activities;
 
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -9,8 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
-
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.pc.apps.simpletweets.Utilities.EndlessScrollListener;
 import com.pc.apps.simpletweets.R;
@@ -19,7 +18,6 @@ import com.pc.apps.simpletweets.Utilities.TwitterClient;
 import com.pc.apps.simpletweets.adapters.TweetsArrayAdapter;
 import com.pc.apps.simpletweets.models.Tweet;
 import com.pc.apps.simpletweets.models.User;
-
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -34,14 +32,37 @@ public class TimelineActivity extends ActionBarActivity implements ComposeTweetD
     private TweetsArrayAdapter aTweets;
     private ListView lvTweets;
     public static long MAX_ID = Long.MAX_VALUE;
-    ComposeTweetDialog composeTweetDialog;
+    private ComposeTweetDialog composeTweetDialog;
     private static User currentUser;
+    private SwipeRefreshLayout swipeContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-        // Set a ToolBar to replace the ActionBar.
+
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                aTweets.clear();
+                MAX_ID = Long.MAX_VALUE;
+                populateTimeline();
+                swipeContainer.setRefreshing(false);
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+
+    // Set a ToolBar to replace the ActionBar.
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -94,7 +115,6 @@ public class TimelineActivity extends ActionBarActivity implements ComposeTweetD
     // Fill the listview by creating the tweet objects from json
     private void populateTimeline() {
         client.getHomeTimeline(new JsonHttpResponseHandler(){
-
             //Success
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
@@ -175,4 +195,5 @@ public class TimelineActivity extends ActionBarActivity implements ComposeTweetD
             }
         } , text);
     }
+
 }

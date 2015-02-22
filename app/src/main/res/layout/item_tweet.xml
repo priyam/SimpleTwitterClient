@@ -47,9 +47,12 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:textSize="13sp"
-        android:minLines="2"
-        android:maxLines="10"
-        android:ellipsize="end"/>
+        android:minLines="1"
+        android:maxLines="5"
+        android:autoLink="all"
+        android:linksClickable="true"
+        android:ellipsize="end"
+        />
 
     <TextView
         android:layout_width="wrap_content"
