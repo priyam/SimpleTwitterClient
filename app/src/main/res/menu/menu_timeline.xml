@@ -3,11 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.pc.apps.simpletweets.activities.TimelineActivity"
     >
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+
     <item
         android:id="@+id/miCompose"
-        android:icon="@mipmap/ic_compose"
+        android:icon="@mipmap/mi_compose_quill"
         app:showAsAction="ifRoom"
         android:onClick="onComposeTweetAction"
         android:title="Compose">
